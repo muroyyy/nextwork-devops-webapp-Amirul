@@ -1,21 +1,35 @@
 version: 0.2
 
+env:
+  variables:
+    CODEARTIFACT_DOMAIN: "nextwork"
+    CODEARTIFACT_DOMAIN_OWNER: "104835654871"
+
 phases:
   install:
     runtime-versions:
       java: corretto8
+    commands:
+      - echo "Installing dependencies for the build"
+      - echo "Ensuring Maven and environment tools are available"
   pre_build:
     commands:
-      - echo Initializing environment
-      - export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain nextwork --domain-owner 104835654871 --query authorizationToken --output text`
+      - echo "Initializing environment and retrieving CodeArtifact authentication token"
+      - |
+        export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+          --domain $CODEARTIFACT_DOMAIN \
+          --domain-owner $CODEARTIFACT_DOMAIN_OWNER \
+          --query authorizationToken \
+          --output text) || { echo "Failed to fetch CodeArtifact token"; exit 1; }
+      - echo "CodeArtifact authentication token retrieved successfully"
   build:
     commands:
-      - echo Build started on `date`
-      - mvn -s settings.xml compile
+      - echo "Build started on $(date)"
+      - mvn -s settings.xml compile || { echo "Maven compile failed"; exit 1; }
   post_build:
     commands:
-      - echo Build completed on `date`
-      - mvn -s settings.xml package
+      - echo "Build completed on $(date)"
+      - mvn -s settings.xml package || { echo "Maven package failed"; exit 1; }
 artifacts:
   files:
     - target/nextwork-web-project.war

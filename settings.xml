@@ -11,13 +11,17 @@
         <profile>
             <id>nextwork-nextwork-packages</id>
             <activation>
-            <activeByDefault>true</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <repositories>
-            <repository>
-                <id>nextwork-nextwork-packages</id>
-                <url>https://nextwork-104835654871.d.codeartifact.ap-southeast-1.amazonaws.com/maven/nextwork-packages/</url>
-            </repository>
+                <repository>
+                    <id>nextwork-nextwork-packages</id>
+                    <url>https://nextwork-104835654871.d.codeartifact.ap-southeast-1.amazonaws.com/maven/nextwork-packages/</url>
+                </repository>
+                <repository>
+                    <id>maven-central</id>
+                    <url>https://repo.maven.apache.org/maven2/</url>
+                </repository>
             </repositories>
         </profile>
     </profiles>
@@ -27,7 +31,8 @@
             <id>nextwork-nextwork-packages</id>
             <name>nextwork-nextwork-packages</name>
             <url>https://nextwork-104835654871.d.codeartifact.ap-southeast-1.amazonaws.com/maven/nextwork-packages/</url>
-            <mirrorOf>*</mirrorOf>
+            <mirrorOf>*,!central</mirrorOf>
         </mirror>
     </mirrors>
+
 </settings>
